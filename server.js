@@ -77,6 +77,14 @@ app.use((req, res, next) => {
 
 app.get('/api/health', (req, res) => res.json({ ok: true }));
 
+app.get('/api/rooms', (req, res) => {
+    const out = [];
+    for (const [room, set] of rooms) {
+        if (set.size > 0) out.push({ name: room, online: set.size });
+    }
+    res.json({ rooms: out });
+});
+
 const upload = multer({
     storage: multer.memoryStorage(),
     limits: { fileSize: MAX_FILE_SIZE, files: 1 }
@@ -151,6 +159,20 @@ function sendTo(ws, payload) {
     if (ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify(payload));
 }
 
+function broadcastUsers(room) {
+    const set = rooms.get(room);
+    if (!set) return;
+    const counts = new Map();
+    for (const ws of set) {
+        const n = ws.nick || 'anon';
+        counts.set(n, (counts.get(n) || 0) + 1);
+    }
+    const users = Array.from(counts.entries())
+        .map(([nick, count]) => ({ nick, count }))
+        .sort((a, b) => a.nick.localeCompare(b.nick));
+    broadcast(room, { type: 'users', users });
+}
+
 function deleteFile(shareId) {
     const entry = files.get(shareId);
     if (!entry) return;
@@ -188,12 +210,15 @@ wss.on('connection', (ws, req) => {
 
     ws.room = room;
     ws.token = sanitizeToken(params.get('token')) || crypto.randomBytes(16).toString('hex');
+    ws.nick = sanitizeNick(params.get('nick'));
     ws.isAlive = true;
 
     liveTokens.set(ws.token, (liveTokens.get(ws.token) || 0) + 1);
 
     if (!rooms.has(room)) rooms.set(room, new Set());
     rooms.get(room).add(ws);
+
+    broadcastUsers(room);
 
     // Reconexión: si este token tenía archivos a punto de borrarse, los conserva.
     if (ws.token && pendingDeletion.has(ws.token)) {
@@ -219,6 +244,7 @@ wss.on('connection', (ws, req) => {
         }
         const n = (liveTokens.get(ws.token) || 1) - 1;
         if (n <= 0) liveTokens.delete(ws.token); else liveTokens.set(ws.token, n);
+        broadcastUsers(ws.room);
         // Borra los archivos del dueño tras un breve periodo de gracia (si era su última conexión).
         if (n <= 0 && ws.token && filesByToken.has(ws.token) && !pendingDeletion.has(ws.token)) {
             pendingDeletion.set(ws.token, setTimeout(() => {
@@ -245,6 +271,11 @@ function handleClientMessage(ws, msg) {
             const shareId = String(msg.shareId || '').replace(/[^a-f0-9]/g, '');
             const entry = files.get(shareId);
             if (entry && entry.meta.token === ws.token) deleteFile(shareId);
+            break;
+        }
+        case 'setnick': {
+            ws.nick = sanitizeNick(msg.nick);
+            broadcastUsers(ws.room);
             break;
         }
         default:
