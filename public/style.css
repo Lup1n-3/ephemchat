@@ -41,8 +41,8 @@ b { font-weight: 600; }
   align-items: center;
   padding: 48px 20px;
 }
-.brand { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
-.brand .mark { width: 34px; height: 34px; border-radius: 7px; }
+.brand { display: flex; align-items: center; justify-content: center; margin-bottom: 6px; }
+.brand .mark { height: 48px; width: auto; }
 .brand h1 {
   font-family: var(--mono);
   font-size: 22px;
