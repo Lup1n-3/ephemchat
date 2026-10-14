@@ -264,6 +264,14 @@ b { font-weight: 600; }
   text-transform: uppercase; letter-spacing: .05em; color: var(--muted);
 }
 .users header .n { font-family: var(--mono); font-size: 12px; color: var(--faint); }
+.users header .u-right { display: flex; align-items: center; gap: 8px; }
+.users-close {
+  background: none; border: 1px solid var(--border); color: var(--muted);
+  border-radius: 6px; width: 24px; height: 24px; line-height: 1;
+  cursor: pointer; font-size: 16px; padding: 0;
+}
+.users-close:hover { color: var(--text); border-color: var(--border-strong); }
+.users-backdrop { display: none; }
 .users ul { list-style: none; margin: 0; padding: 8px; overflow-y: auto; }
 .users li {
   display: flex; align-items: center; gap: 8px;
@@ -345,6 +353,12 @@ b { font-weight: 600; }
     width: 82vw; max-width: 280px;
     z-index: 40;
     box-shadow: -12px 0 30px rgba(0, 0, 0, .45);
+  }
+  .users-backdrop {
+    display: block;
+    position: fixed; inset: 0;
+    background: rgba(0, 0, 0, .5);
+    z-index: 39;
   }
 
   .composer { padding: 8px 10px; }

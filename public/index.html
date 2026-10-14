@@ -52,8 +52,16 @@
   <div class="layout">
     <main class="messages" id="messages"></main>
 
+    <div id="users-backdrop" class="users-backdrop" hidden></div>
+
     <aside class="users" id="users">
-      <header><h2>Usuarios</h2><span class="n" id="users-count">0</span></header>
+      <header>
+        <h2>Usuarios</h2>
+        <div class="u-right">
+          <span class="n" id="users-count">0</span>
+          <button class="users-close" id="users-close" title="Cerrar">×</button>
+        </div>
+      </header>
       <ul id="users-list"></ul>
     </aside>
   </div>

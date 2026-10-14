@@ -108,6 +108,8 @@
     var usersList = document.getElementById('users-list');
     var usersCount = document.getElementById('users-count');
     var usersToggle = document.getElementById('users-toggle');
+    var usersBackdrop = document.getElementById('users-backdrop');
+    var usersClose = document.getElementById('users-close');
     var overlay = document.getElementById('overlay');
     var modalNick = document.getElementById('modal-nick');
     var modalJoin = document.getElementById('modal-join');
@@ -441,14 +443,26 @@
         if (f) uploadFile(f);
     });
 
+    function setUsersPanel(open) {
+        usersEl.hidden = !open;
+        usersBackdrop.hidden = !open;
+        usersToggle.classList.toggle('on', open);
+    }
+
     usersToggle.addEventListener('click', function () {
-        usersEl.hidden = !usersEl.hidden;
-        usersToggle.classList.toggle('on', !usersEl.hidden);
+        setUsersPanel(usersEl.hidden);
+    });
+    usersClose.addEventListener('click', function () {
+        setUsersPanel(false);
+    });
+    usersBackdrop.addEventListener('click', function () {
+        setUsersPanel(false);
     });
 
+    usersToggle.classList.toggle('on', !usersEl.hidden);
     // En móvil el panel de usuarios se oculta por defecto (se muestra como overlay).
     if (window.innerWidth <= 768) {
-        usersEl.hidden = true;
+        setUsersPanel(false);
     }
 
     nickEl.addEventListener('input', function () {
