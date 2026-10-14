@@ -125,7 +125,7 @@ b { font-weight: 600; }
 .join button:hover { background: var(--accent-strong); }
 
 /* ---------------- chat ---------------- */
-.chat { height: 100vh; display: flex; flex-direction: column; }
+.chat { height: 100vh; height: 100dvh; display: flex; flex-direction: column; }
 
 .topbar {
   display: flex;
@@ -324,3 +324,40 @@ b { font-weight: 600; }
 
 ::-webkit-scrollbar { width: 10px; height: 10px; }
 ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 6px; }
+
+/* ---------------- responsive / móvil ---------------- */
+@media (max-width: 768px) {
+  .landing { padding: 28px 14px; }
+  .brand .mark { height: 40px; }
+  .tagline { margin-bottom: 22px; }
+  .rooms { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+
+  .topbar { gap: 8px; padding: 8px 10px; }
+  .room-label { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .topbar input.nick { width: 84px; }
+  #status-text { display: none; }
+
+  .messages { padding: 12px; }
+
+  .users {
+    position: fixed;
+    top: 0; right: 0; bottom: 0;
+    width: 82vw; max-width: 280px;
+    z-index: 40;
+    box-shadow: -12px 0 30px rgba(0, 0, 0, .45);
+  }
+
+  .composer { padding: 8px 10px; }
+  .toolbar { gap: 6px; flex-wrap: wrap; }
+  .icon-btn { padding: 8px 10px; }
+  .send { padding: 10px 16px; }
+
+  .overlay { padding: 16px; }
+  .modal { max-width: 100%; }
+}
+
+@media (max-width: 400px) {
+  .topbar input.nick { width: 64px; }
+  .back { padding: 4px 8px; }
+  .room-label { max-width: 30vw; }
+}

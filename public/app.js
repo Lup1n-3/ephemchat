@@ -446,6 +446,11 @@
         usersToggle.classList.toggle('on', !usersEl.hidden);
     });
 
+    // En móvil el panel de usuarios se oculta por defecto (se muestra como overlay).
+    if (window.innerWidth <= 768) {
+        usersEl.hidden = true;
+    }
+
     nickEl.addEventListener('input', function () {
         try { sessionStorage.setItem('ec_nick', nickEl.value); } catch (e) {}
         if (ws && ws.readyState === WebSocket.OPEN) {
