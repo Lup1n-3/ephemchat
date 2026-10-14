@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<title>EphemChat</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<!-- ============ Vista: portada ============ -->
+<div id="view-landing" class="view" hidden>
+    <div class="landing-card">
+        <h1>EphemChat</h1>
+        <p class="muted">Chat efímero por salas. Sin registro, sin historial. Todo desaparece al salir.</p>
+        <form id="room-form" class="room-form">
+            <input id="room-input" type="text" maxlength="64" placeholder="nombre de la sala (ej: hola)"
+                   autocomplete="off" autocapitalize="off" spellcheck="false" required>
+            <button type="submit">Entrar</button>
+        </form>
+        <p class="muted small">Comparte el enlace: <code>tudominio.com/hola</code></p>
+    </div>
+</div>
+
+<!-- ============ Vista: chat ============ -->
+<div id="view-chat" class="view" hidden>
+    <header class="topbar">
+        <div class="room-title">/<span id="room-name"></span></div>
+        <div class="top-actions">
+            <span id="status" class="status status-connecting">conectando…</span>
+            <input id="nick" type="text" maxlength="32" placeholder="apodo" autocomplete="off" spellcheck="false">
+        </div>
+    </header>
+
+    <main id="messages" class="messages"></main>
+
+    <footer class="composer">
+        <div id="upload-progress" class="upload-progress" hidden></div>
+        <div class="toolbar">
+            <button id="btn-code" type="button" class="tool" title="Enviar como bloque de código">&lt;/&gt;</button>
+            <select id="lang" class="lang" title="Lenguaje del bloque de código">
+                <option value="">auto</option>
+                <option value="text">text</option>
+                <option value="js">js</option>
+                <option value="ts">ts</option>
+                <option value="py">py</option>
+                <option value="php">php</option>
+                <option value="html">html</option>
+                <option value="css">css</option>
+                <option value="json">json</option>
+                <option value="bash">bash</option>
+                <option value="sql">sql</option>
+                <option value="java">java</option>
+                <option value="c">c</option>
+                <option value="cpp">cpp</option>
+                <option value="go">go</option>
+                <option value="rust">rust</option>
+            </select>
+            <button id="btn-file" type="button" class="tool" title="Compartir archivo (efímero)">📎</button>
+            <input id="file-input" type="file" hidden>
+        </div>
+        <div class="input-row">
+            <textarea id="input" rows="1" placeholder="Escribe… (Markdown permitido) · Enter para enviar"></textarea>
+            <button id="btn-send" type="button" class="send">Enviar</button>
+        </div>
+        <div class="hint muted small">Markdown, bloques de código con ``` y archivos efímeros. Nada queda guardado.</div>
+    </footer>
+</div>
+
+<script src="/vendor/marked.min.js"></script>
+<script src="/vendor/purify.min.js"></script>
+<script src="/vendor/highlight.min.js"></script>
+<script src="/app.js"></script>
+</body>
+</html>
